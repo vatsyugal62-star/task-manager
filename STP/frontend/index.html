@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <base href="/frontend/">
+  <link rel="stylesheet" href="css/style.css?v=2.6">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Auth Section -->
+    <section id="auth-section" class="auth-wrapper">
+      <div class="card auth-card">
+        <h2 id="auth-title">Log In</h2>
+        <p id="auth-subtitle" class="text-muted">Welcome back. Please enter your details.</p>
+        
+        <form id="auth-form">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="you@example.com">
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="password" required minlength="6" placeholder="••••••••">
+              <button type="button" id="toggle-password" class="icon-btn" aria-label="Toggle password visibility">
+                <!-- Eye icon -->
+                <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+          
+          <div id="auth-error" class="error-msg hidden"></div>
+          
+          <button type="submit" id="btn-auth-submit" class="btn btn-primary full-width">Log In</button>
+        </form>
+        
+        <div class="auth-switch">
+          <span id="auth-switch-text">Don't have an account?</span>
+          <button type="button" id="btn-switch-mode" class="link-btn">Sign Up</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Onboarding Section -->
+    <section id="onboard-section" class="auth-wrapper hidden">
+      <div class="card auth-card">
+        <h2>Welcome!</h2>
+        <p class="text-muted">Let's get to know you before we start.</p>
+        <form id="onboard-form">
+          <div class="form-group">
+            <label for="onboard-username">What should we call you?</label>
+            <input type="text" id="onboard-username" required placeholder="Your first name">
+          </div>
+          <div id="onboard-error" class="error-msg hidden"></div>
+          <button type="submit" id="btn-onboard-submit" class="btn btn-primary full-width">Continue</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- App Section -->
+    <section id="app-section" class="hidden">
+      <header class="app-header">
+        <div>
+          <h1 id="greeting">Hello!</h1>
+          <p class="text-muted">Here are your tasks.</p>
+        </div>
+        <button id="btn-logout" class="btn btn-secondary btn-sm">Log Out</button>
+      </header>
+
+      <!-- Task Creation Form -->
+      <div class="card form-card">
+        <form id="task-form">
+          <input type="hidden" id="task-id">
+          
+          <div class="form-group title-group">
+            <input type="text" id="task-title" placeholder="What needs to be done?" required class="input-large">
+          </div>
+          
+          <div class="task-form-row">
+            <div class="form-group">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="task-due">Due Date</label>
+              <input type="date" id="task-due">
+            </div>
+            <div class="task-form-actions align-bottom">
+              <button type="submit" id="btn-save-task" class="btn btn-primary">Add Task</button>
+              <button type="button" id="btn-cancel-edit" class="btn btn-secondary hidden">Cancel</button>
+            </div>
+          </div>
+          <div id="task-error" class="error-msg hidden"></div>
+        </form>
+      </div>
+
+      <!-- Progress Overview Card -->
+      <div class="card progress-card" id="progress-card">
+        <div class="progress-header">
+          <div class="progress-stats">
+            <span class="progress-label">Progress Overview</span>
+            <span class="progress-percent mono" id="progress-percent">0%</span>
+          </div>
+          <div class="progress-counts mono">
+            <span id="stat-completed">0 completed</span> • 
+            <span id="stat-in-progress">0 in progress</span> • 
+            <span id="stat-pending">0 to do</span>
+            <span id="stat-overdue-wrap" class="hidden"> • <span id="stat-overdue" class="stat-overdue-text">0 overdue</span></span>
+          </div>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Task Controls (Filters & Search) -->
+      <div class="card controls-card">
+        <div class="controls-top">
+          <input type="text" id="search-input" placeholder="Search tasks...">
+        </div>
+        <div class="controls-filters">
+          <select id="filter-status" aria-label="Filter by status">
+            <option value="all">All Statuses</option>
+            <option value="todo">To Do</option>
+            <option value="in_progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+          <select id="filter-priority" aria-label="Filter by priority">
+            <option value="all">All Priorities</option>
+            <option value="high">High Priority</option>
+            <option value="medium">Medium Priority</option>
+            <option value="low">Low Priority</option>
+          </select>
+          <select id="sort-by" aria-label="Sort tasks">
+            <option value="created-desc">Sort: Newest First</option>
+            <option value="created-asc">Sort: Oldest First</option>
+            <option value="due-asc">Sort: Due Date (Earliest)</option>
+            <option value="priority-desc">Sort: Priority (High to Low)</option>
+            <option value="title-asc">Sort: Title (A-Z)</option>
+          </select>
+        </div>
+        <div class="quick-filters">
+          <button class="chip active" data-filter="all">All Tasks</button>
+          <button class="chip" data-filter="due-soon">Due Soon (2 days)</button>
+          <button class="chip" data-filter="overdue">Overdue</button>
+          <button class="chip" data-filter="high-priority">Urgent (High)</button>
+        </div>
+      </div>
+
+
+      <!-- Task List -->
+      <div id="task-list" class="task-list">
+        <div class="empty-state">
+          <p>No tasks created yet</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Delete Undo Toast -->
+  <div id="toast-container" class="toast-container hidden">
+    <div class="toast">
+      <span>Task deleted.</span>
+      <span class="toast-countdown mono" id="toast-timer">10s</span>
+      <button id="btn-undo-delete" class="link-btn">Undo</button>
+    </div>
+  </div>
+
+  <!-- Calm Checkmark Animation Overlay -->
+  <div id="anim-overlay" class="anim-overlay hidden">
+    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+      <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+    </svg>
+  </div>
+
+  <!-- Logout Password Confirmation Modal -->
+  <div id="logout-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="logout-title" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); align-items: center; justify-content: center; z-index: 99999; padding: 1.5rem; box-sizing: border-box;">
+    <div class="modal-card" style="background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18); border-radius: 12px; padding: 2rem; max-width: 420px; width: 100%; box-sizing: border-box;">
+      <h3 id="logout-title" style="margin-top: 0; margin-bottom: 0.5rem; font-size: 1.25rem;">Confirm Logout</h3>
+      <p class="text-muted" style="margin-bottom: 1.25rem; font-size: 0.95rem;">Please enter your password to log out securely.</p>
+      <form id="logout-form">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="logout-password" style="display: block; margin-bottom: 0.4rem; font-weight: 500;">Password</label>
+          <div class="password-wrapper" style="position: relative; display: flex; align-items: center; width: 100%;">
+            <input type="password" id="logout-password" required placeholder="••••••••" style="width: 100%; box-sizing: border-box; padding: 0.75rem 2.5rem 0.75rem 0.85rem; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; font-size: 0.95rem; background-color: rgba(255,255,255,0.7);">
+            <button type="button" id="toggle-logout-password" class="icon-btn" aria-label="Toggle password visibility" style="position: absolute; right: 0.75rem; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #73716d;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div id="logout-error" class="error-msg hidden" style="margin-bottom: 1rem; border-radius: 8px;"></div>
+        <div class="modal-actions" style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem;">
+          <button type="button" id="btn-cancel-logout" class="btn btn-secondary" style="padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer;">Cancel</button>
+          <button type="submit" id="btn-confirm-logout" class="btn btn-primary" style="padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer;">Log Out</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
+
